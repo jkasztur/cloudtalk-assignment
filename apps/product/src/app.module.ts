@@ -1,9 +1,13 @@
-import { ClassSerializerInterceptor, Module, ValidationPipe } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import configuration, { Config } from './app.config';
-import { ProductsModule } from './products/products.module';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import {
+	ClassSerializerInterceptor,
+	Module,
+	ValidationPipe,
+} from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import configuration, { Config } from './app.config'
+import { ProductsModule } from './products/products.module'
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 
 @Module({
 	imports: [
@@ -32,7 +36,6 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 			provide: 'APP_INTERCEPTOR',
 			useClass: ClassSerializerInterceptor,
 		},
-
 	],
 })
 export class AppModule {}

@@ -1,14 +1,21 @@
-import { IsNumber, IsString, MaxLength } from 'class-validator';
+import { PartialType } from '@nestjs/swagger'
+import { IsNumber, IsString, MaxLength } from 'class-validator'
 
-export class CreateProductDto {
+export class CreateProductRequest {
 	@IsString()
 	@MaxLength(128)
-	name: string;
+	name: string
 
 	@IsString()
 	@MaxLength(256)
-	description: string;
+	description: string
 
 	@IsNumber()
-	price: number;
+	price: number
 }
+
+export class DeleteProductResponse {
+	deleted: boolean
+}
+
+export class UpdateProductRequest extends PartialType(CreateProductRequest) {}

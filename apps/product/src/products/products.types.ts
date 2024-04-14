@@ -1,4 +1,4 @@
 export type ListResponse<T> = {
-	items: T[];
-	offset: number;
-};
+	items: T[]
+	offset: number
+}

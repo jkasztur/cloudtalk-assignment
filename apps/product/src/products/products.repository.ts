@@ -1,8 +1,8 @@
-import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from './product.entity';
-import { MoreThan, Repository } from 'typeorm';
-import { ListResponse } from './products.types';
-import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm'
+import { Product } from './product.entity'
+import { MoreThan, Repository } from 'typeorm'
+import { ListResponse } from './products.types'
+import { Injectable } from '@nestjs/common'
 
 @Injectable()
 export class ProductsRepository {
@@ -12,16 +12,17 @@ export class ProductsRepository {
 	) {}
 
 	create(product: Partial<Product>): Promise<Product> {
-		return this.repository.save(product);
+		return this.repository.save(product)
 	}
 
-	async update(id: number, product: Partial<Product>): Promise<void> {
-		await this.repository.update(id, product);
+	async update(product: Product, changes: Partial<Product>): Promise<Product> {
+		Object.assign(product, changes)
+		return await this.repository.save(product)
 	}
 
 	async delete(id: number): Promise<boolean> {
-		const deleted = await this.repository.delete(id);
-		return deleted.affected > 0;
+		const deleted = await this.repository.delete(id)
+		return deleted.affected > 0
 	}
 
 	/**
@@ -38,13 +39,13 @@ export class ProductsRepository {
 			},
 			take: limit ?? 0,
 			order: { id: 'ASC' },
-		});
+		})
 
-		const newOffset = items.length > 0 ? items[items.length - 1].id : null;
-		return { items, offset: newOffset };
+		const newOffset = items.length > 0 ? items[items.length - 1].id : null
+		return { items, offset: newOffset }
 	}
 
 	async get(id: number): Promise<Product> {
-		return this.repository.findOneBy({ id });
+		return this.repository.findOneBy({ id })
 	}
 }
