@@ -1,4 +1,4 @@
-import { DataSourceOptions } from "typeorm";
+import { DataSourceOptions } from 'typeorm';
 
 export type Config = {
 	postgres: DataSourceOptions;
@@ -6,7 +6,7 @@ export type Config = {
 		host: string;
 		port: number;
 	};
-}
+};
 
 export default (): Config => ({
 	postgres: {
@@ -20,5 +20,5 @@ export default (): Config => ({
 	redis: {
 		host: process.env.REDIS_HOST,
 		port: parseInt(process.env.REDIS_PORT, 10) || 6379,
-	}
-})
+	},
+});
