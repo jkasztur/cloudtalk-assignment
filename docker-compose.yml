@@ -1,0 +1,52 @@
+version: "3"
+
+services:
+  product:
+    container_name: product
+    working_dir: /app
+    volumes:
+      - .:/app:delegated
+    environment:
+      SCOPE: product
+      MY_TEST_ENV: itworks
+    build:
+      context: .
+      dockerfile: ./apps/product/Dockerfile
+    restart: on-failure
+    command: npm run dev
+    ports:
+      - 3002:80
+
+  review-processing-1:
+    container_name: review-processing-1
+    working_dir: /app
+    volumes:
+      - .:/app:delegated
+    environment:
+      SCOPE: review-processing
+    build:
+      context: .
+      dockerfile: ./apps/review-processing/Dockerfile
+    restart: on-failure
+    command: npm run dev
+    ports:
+      - 3003:80
+
+  review-processing-2:
+    container_name: review-processing-2
+    working_dir: /app
+    volumes:
+      - .:/app:delegated
+    environment:
+      SCOPE: review-processing
+    build:
+      context: .
+      dockerfile: ./apps/review-processing/Dockerfile
+    restart: on-failure
+    command: npm run dev
+    ports:
+      - 3004:80
+
+networks:
+  default:
+    name: cloudtalke
