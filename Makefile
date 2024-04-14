@@ -9,10 +9,10 @@ up:
 	docker-compose up --force-recreate
 
 up-services:
-	docker-compose up --force-recreate postgres redis amqp
+	docker-compose up postgres redis amqp
 
 up-apps:
-	docker-compose up --force-recreate product review-processing-1 review-processing-2
+	docker-compose up product review-processing-1 review-processing-2
 
 stop:
 	docker-compose stop

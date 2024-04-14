@@ -12,13 +12,10 @@ import {
 	Get,
 } from '@nestjs/common'
 import { ProductsService } from './products.service'
-import {
-	CreateProductRequest,
-	DeleteProductResponse,
-	UpdateProductRequest,
-} from './products.dto'
+import { CreateProductRequest, UpdateProductRequest } from './products.dto'
 import { ApiTags } from '@nestjs/swagger'
 import { Product } from './product.entity'
+import { DeleteResponse } from 'src/app.dto'
 
 @Controller('/products')
 @ApiTags('products')
@@ -33,7 +30,7 @@ export class ProductsController {
 
 	@Delete('/:id')
 	@HttpCode(HttpStatus.OK)
-	delete(@Param('id') id: number): Promise<DeleteProductResponse> {
+	delete(@Param('id') id: number): Promise<DeleteResponse> {
 		return this.service.delete(id)
 	}
 

@@ -9,6 +9,7 @@ import configuration, { Config } from './app.config'
 import { ProductsModule } from './products/products.module'
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 import { AppController } from './app.controller'
+import { ReviewsModule } from './reviews/reviews.module'
 
 @Module({
 	imports: [
@@ -28,6 +29,7 @@ import { AppController } from './app.controller'
 			}),
 		}),
 		ProductsModule,
+		ReviewsModule,
 	],
 	controllers: [AppController],
 	providers: [

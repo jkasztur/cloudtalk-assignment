@@ -23,7 +23,16 @@ export class ProductsService {
 		return this.repository.update(product, changes)
 	}
 
-	getById(id: number) {
-		return this.repository.get(id)
+	async getById(id: number) {
+		const product = await this.repository.get(id)
+		if (product) {
+			product.averageRating = await this.getAverageRating()
+		}
+		return product
+	}
+
+	private getAverageRating() {
+		// TODO: get average rating from cache
+		return Promise.resolve(null)
 	}
 }

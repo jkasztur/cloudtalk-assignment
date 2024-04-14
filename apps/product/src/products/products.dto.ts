@@ -14,8 +14,4 @@ export class CreateProductRequest {
 	price: number
 }
 
-export class DeleteProductResponse {
-	deleted: boolean
-}
-
 export class UpdateProductRequest extends PartialType(CreateProductRequest) {}
