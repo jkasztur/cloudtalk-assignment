@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import configuration, { Config } from './app.config'
 import { ProductsModule } from './products/products.module'
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
+import { AppController } from './app.controller'
 
 @Module({
 	imports: [
@@ -27,6 +28,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 		}),
 		ProductsModule,
 	],
+	controllers: [AppController],
 	providers: [
 		{
 			provide: 'APP_PIPE',
