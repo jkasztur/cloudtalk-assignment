@@ -1,6 +1,7 @@
 version: "3"
 
 services:
+# Apps
   product:
     container_name: product
     working_dir: /app
@@ -8,7 +9,20 @@ services:
       - .:/app:delegated
     environment:
       SCOPE: product
-      MY_TEST_ENV: itworks
+
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_DATABASE: postgres
+
+      AMQP_HOSTS: amqp
+      AMQP_PORT: 5672
+      AMQP_USERNAME: guest
+      AMQP_PASSWORD: guest
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     build:
       context: .
       dockerfile: ./apps/product/Dockerfile
@@ -16,6 +30,10 @@ services:
     command: npm run dev
     ports:
       - 3002:80
+    depends_on:
+      - redis
+      - postgres
+      - amqp
 
   review-processing-1:
     container_name: review-processing-1
@@ -24,6 +42,14 @@ services:
       - .:/app:delegated
     environment:
       SCOPE: review-processing
+
+      AMQP_HOSTS: amqp
+      AMQP_PORT: 5672
+      AMQP_USERNAME: guest
+      AMQP_PASSWORD: guest
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     build:
       context: .
       dockerfile: ./apps/review-processing/Dockerfile
@@ -31,6 +57,9 @@ services:
     command: npm run dev
     ports:
       - 3003:80
+    depends_on:
+      - redis
+      - amqp
 
   review-processing-2:
     container_name: review-processing-2
@@ -39,6 +68,13 @@ services:
       - .:/app:delegated
     environment:
       SCOPE: review-processing
+      AMQP_HOSTS: amqp
+      AMQP_PORT: 5672
+      AMQP_USERNAME: guest
+      AMQP_PASSWORD: guest
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     build:
       context: .
       dockerfile: ./apps/review-processing/Dockerfile
@@ -46,6 +82,38 @@ services:
     command: npm run dev
     ports:
       - 3004:80
+    depends_on:
+      - redis
+      - amqp
+
+# Services
+  redis:
+    image: redis:6.2-alpine
+    container_name: redis
+    ports:
+      - 3005:6379
+    command: [ "redis-server", "--appendonly", "yes" ]
+    restart: on-failure
+
+  postgres:
+    image: postgres:15.5-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - 3006:5432
+
+  amqp:
+    image: rabbitmq:3.9.12-management
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "3007:5672"
+      - "3008:15672"
 
 networks:
   default:
