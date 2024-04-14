@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import configuration, { Config } from './app.config';
@@ -22,6 +22,17 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 			}),
 		}),
 		ProductsModule,
+	],
+	providers: [
+		{
+			provide: 'APP_PIPE',
+			useValue: new ValidationPipe({ whitelist: true, transform: true }),
+		},
+		{
+			provide: 'APP_INTERCEPTOR',
+			useClass: ClassSerializerInterceptor,
+		},
+
 	],
 })
 export class AppModule {}
