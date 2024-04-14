@@ -24,6 +24,7 @@ import { AppController } from './app.controller'
 				migrations: [__dirname + '/migrations/*.{ts,js}'],
 				migrationsRun: true,
 				namingStrategy: new SnakeNamingStrategy(),
+				autoLoadEntities: true,
 			}),
 		}),
 		ProductsModule,
