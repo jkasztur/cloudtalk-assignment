@@ -18,4 +18,13 @@ export class ReviewsRepository {
 		const deleted = await this.repository.delete(id)
 		return deleted.affected > 0
 	}
+
+	async get(id: number): Promise<Review> {
+		return this.repository.findOneBy({ id })
+	}
+
+	async update(review: Review, changes: Partial<Review>): Promise<Review> {
+		Object.assign(review, changes)
+		return await this.repository.save(review)
+	}
 }
