@@ -4,7 +4,7 @@ export type Config = {
 	redis: {
 		host: string
 		port: number
-		database: number
+		db: number
 	}
 	amqp: RmqUrl
 }
@@ -14,7 +14,7 @@ export default (): Config => {
 		redis: {
 			host: process.env.REDIS_HOST || 'localhost',
 			port: parseInt(process.env.REDIS_PORT, 10) || 3005,
-			database: parseInt(process.env.REDIS_DATABASE, 10) || 0,
+			db: parseInt(process.env.REDIS_DATABASE, 10) || 0,
 		},
 		amqp: {
 			hostname: process.env.AMQP_HOST,
@@ -24,7 +24,7 @@ export default (): Config => {
 		},
 	}
 	if (process.env.NODE_ENV === 'test') {
-		config.redis.database = 6
+		config.redis.db = 6
 	}
 	return config
 }
