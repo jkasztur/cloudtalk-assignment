@@ -10,8 +10,6 @@ import { ProductsModule } from './products/products.module'
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 import { AppController } from './app.controller'
 import { ReviewsModule } from './reviews/reviews.module'
-import { ClientsModule, Transport } from '@nestjs/microservices'
-import { RmqUrl } from '@nestjs/microservices/external/rmq-url.interface'
 
 @Module({
 	imports: [
@@ -30,17 +28,6 @@ import { RmqUrl } from '@nestjs/microservices/external/rmq-url.interface'
 				autoLoadEntities: true,
 			}),
 		}),
-		ClientsModule.registerAsync([{
-			name: 'AMQP_CLIENT',
-			imports: [ConfigModule],
-			inject: [ConfigService],
-			useFactory: (configService: ConfigService) => ({
-				transport: Transport.RMQ,
-				options: {
-					urls: [configService.get<RmqUrl>('amqp')],
-				}
-			})
-		}]),
 		ProductsModule,
 		ReviewsModule,
 	],

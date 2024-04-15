@@ -11,7 +11,11 @@ async function bootstrap() {
 		transport: Transport.RMQ,
 		options: {
 			urls: [configService.get<RmqUrl>('amqp')],
-		}
+			queue: 'review-processing',
+			queueOptions: {
+				durable: true,
+			},
+		},
 	})
 
 	await app.startAllMicroservices()

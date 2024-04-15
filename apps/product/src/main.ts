@@ -12,7 +12,11 @@ async function bootstrap() {
 		transport: Transport.RMQ,
 		options: {
 			urls: [configService.get<RmqUrl>('amqp')],
-		}
+			queue: 'product',
+			queueOptions: {
+				durable: true,
+			},
+		},
 	})
 
 	const schema = new DocumentBuilder()

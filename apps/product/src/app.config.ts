@@ -38,7 +38,7 @@ export default (): Config => {
 			port: parseInt(process.env.AMQP_PORT, 10) || 3007,
 			username: process.env.AMQP_USERNAME,
 			password: process.env.AMQP_PASSWORD,
-		}
+		},
 	}
 	if (process.env.NODE_ENV === 'test') {
 		config.postgres.database = 'test'

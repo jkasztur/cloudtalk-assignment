@@ -3,11 +3,10 @@ import {
 	Module,
 	ValidationPipe,
 } from '@nestjs/common'
-import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ConfigModule } from '@nestjs/config'
 import configuration from './app.config'
 import { AppController } from './app.controller'
-import { ClientsModule, Transport } from '@nestjs/microservices'
-import { RmqUrl } from '@nestjs/microservices/external/rmq-url.interface'
+import { ProcessingModule } from './processing/processing.module'
 
 @Module({
 	imports: [
@@ -15,17 +14,7 @@ import { RmqUrl } from '@nestjs/microservices/external/rmq-url.interface'
 			ignoreEnvFile: true,
 			load: [configuration],
 		}),
-		ClientsModule.registerAsync([{
-			name: 'AMQP_CLIENT',
-			imports: [ConfigModule],
-			inject: [ConfigService],
-			useFactory: (configService: ConfigService) => ({
-				transport: Transport.RMQ,
-				options: {
-					urls: [configService.get<RmqUrl>('amqp')],
-				}
-			})
-		}]),
+		ProcessingModule,
 	],
 	controllers: [AppController],
 	providers: [
