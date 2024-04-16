@@ -16,29 +16,32 @@ export class ProcessingController {
 
 	@MessagePattern(EventType.ReviewCreated)
 	async handleReviewCreated(@Payload() data: ReviewCreated) {
+		this.logger.debug(
+			`Received event ${EventType.ReviewCreated} with data ${JSON.stringify(data)}`,
+		)
 		await this.service.addReview(data.productId, data.rating)
-		const avg = await this.service.getAverage(data.productId)
-		this.logger.log(`Average rating for product ${data.productId}: ${avg}`)
-		this.logger.log('Processed event review.created')
+		this.logger.debug('Processed event review.created')
 	}
 
 	@MessagePattern(EventType.ReviewDeleted)
 	async handleReviewDeleted(@Payload() data: ReviewDeleted) {
+		this.logger.debug(
+			`Received event ${EventType.ReviewDeleted} with data ${JSON.stringify(data)}`,
+		)
 		await this.service.removeReview(data.productId, data.rating)
-		const avg = await this.service.getAverage(data.productId)
-		this.logger.log(`Average rating for product ${data.productId}: ${avg}`)
-		this.logger.log('Processed event review.deleted', data)
+		this.logger.debug('Processed event review.deleted', data)
 	}
 
 	@MessagePattern(EventType.ReviewUpdated)
 	async handleReviewUpdated(@Payload() data: ReviewUpdated) {
+		this.logger.debug(
+			`Received event ${EventType.ReviewUpdated} with data ${JSON.stringify(data)}`,
+		)
 		await this.service.updateReview(
 			data.productId,
 			data.oldRating,
 			data.newRating,
 		)
-		const avg = await this.service.getAverage(data.productId)
-		this.logger.log(`Average rating for product ${data.productId}: ${avg}`)
-		this.logger.log('Processed event review.updated', data)
+		this.logger.debug('Processed event review.updated', data)
 	}
 }
