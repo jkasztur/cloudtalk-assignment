@@ -1,7 +1,9 @@
 import { RedisLockService } from '@huangang/nestjs-simple-redis-lock'
-import { Injectable, Logger } from '@nestjs/common'
+import { Inject, Injectable, Logger } from '@nestjs/common'
+import { ClientProxy } from '@nestjs/microservices'
 import { InjectRedis } from '@songkeys/nestjs-redis'
 import Redis from 'ioredis'
+import { EventType } from './processing.types'
 
 const EXPIRE = 1000 * 60 * 60 * 24 * 7 // 1 week
 
@@ -12,6 +14,7 @@ export class ProcessingService {
 	constructor(
 		@InjectRedis() private readonly redis: Redis,
 		private readonly lockService: RedisLockService,
+		@Inject('PRODUCT_QUEUE') private productQueue: ClientProxy,
 	) {}
 
 	async getAverage(productId: number) {
@@ -61,7 +64,10 @@ export class ProcessingService {
 		this.logger.debug(
 			`Average rating changed for product ${productId} to ${newAvg}, notifying`,
 		)
-		// TODO: send event
+		this.productQueue.emit(EventType.AverageUpdated, {
+			productId,
+			average: newAvg,
+		})
 	}
 
 	private avg(sum: number | string, count: number | string): number {

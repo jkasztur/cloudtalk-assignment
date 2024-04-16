@@ -10,6 +10,7 @@ import { ProductsModule } from './products/products.module'
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 import { AppController } from './app.controller'
 import { ReviewsModule } from './reviews/reviews.module'
+import { RatingsModule } from './ratings/ratings.module'
 
 @Module({
 	imports: [
@@ -30,6 +31,7 @@ import { ReviewsModule } from './reviews/reviews.module'
 		}),
 		ProductsModule,
 		ReviewsModule,
+		RatingsModule,
 	],
 	controllers: [AppController],
 	providers: [
