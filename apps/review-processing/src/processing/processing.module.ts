@@ -4,6 +4,7 @@ import { ProcessingService } from './processing.service'
 import { ClientsModule, Transport } from '@nestjs/microservices'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { RmqUrl } from '@nestjs/microservices/external/rmq-url.interface'
+import { HttpModule } from '@nestjs/axios'
 
 @Module({
 	imports: [
@@ -21,6 +22,8 @@ import { RmqUrl } from '@nestjs/microservices/external/rmq-url.interface'
 				}),
 			},
 		]),
+		HttpModule,
+		ConfigModule,
 	],
 	controllers: [ProcessingController],
 	providers: [ProcessingService],

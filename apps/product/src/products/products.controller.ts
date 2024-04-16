@@ -81,7 +81,7 @@ export class ProductsController {
 	// internal endpoint, to fetch not cached product
 	// TODO: add security, move to new controller?
 	@Get('/:id/reviews-aggregated')
-	@ApiExcludeEndpoint()
+		//@ApiExcludeEndpoint()
 	async getReviewsAggregated(
 		@Param('id') id: number,
 	): Promise<AggregatedReviews> {

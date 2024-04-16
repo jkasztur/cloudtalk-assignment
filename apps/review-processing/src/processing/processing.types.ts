@@ -28,3 +28,8 @@ export enum EventType {
 	ReviewUpdated = 'review.updated',
 	AverageUpdated = 'average.updated',
 }
+
+export type AggregatedReviews = {
+	count: number
+	sum: number
+}

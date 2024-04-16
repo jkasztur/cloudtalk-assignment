@@ -3,7 +3,9 @@ import { Inject, Injectable, Logger } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
 import { InjectRedis } from '@songkeys/nestjs-redis'
 import Redis from 'ioredis'
-import { EventType } from './processing.types'
+import { AggregatedReviews, EventType } from './processing.types'
+import { HttpService } from '@nestjs/axios'
+import { ConfigService } from '@nestjs/config'
 
 const EXPIRE = 1000 * 60 * 60 * 24 * 7 // 1 week
 
@@ -14,7 +16,9 @@ export class ProcessingService {
 	constructor(
 		@InjectRedis() private readonly redis: Redis,
 		private readonly lockService: RedisLockService,
-		@Inject('PRODUCT_QUEUE') private productQueue: ClientProxy,
+		@Inject('PRODUCT_QUEUE') private readonly productQueue: ClientProxy,
+		private readonly httpService: HttpService,
+		private readonly config: ConfigService,
 	) {}
 
 	async getAverage(productId: number) {
@@ -96,14 +100,25 @@ export class ProcessingService {
 		if ((await this.redis.exists(this.key(productId))) === 1) {
 			return
 		}
-		// TODO: fetch persisted values from product
+		const fetched = await this.fetchAggregatedReviews(productId)
 		const key = this.key(productId)
 		await this.redis
 			.multi()
-			.hset(key, 'sum', 0)
-			.hset(key, 'count', 0)
+			.hset(key, 'sum', fetched.sum)
+			.hset(key, 'count', fetched.count)
 			.expire(key, EXPIRE)
 			.exec()
+	}
+
+	private async fetchAggregatedReviews(
+		productId: number,
+	): Promise<AggregatedReviews> {
+		const url = `${this.config.get('product').host}/products/${productId}/reviews-aggregated`
+		const response = await this.httpService.axiosRef.get(url)
+		this.logger.debug(
+			`Fetched data for product ${productId}: ${JSON.stringify(response.data)}`,
+		)
+		return response.data
 	}
 
 	private key(productId: number) {

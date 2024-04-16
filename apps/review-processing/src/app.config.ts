@@ -7,6 +7,9 @@ export type Config = {
 		db: number
 	}
 	amqp: RmqUrl
+	product: {
+		host: string
+	}
 }
 
 export default (): Config => {
@@ -21,6 +24,9 @@ export default (): Config => {
 			port: parseInt(process.env.AMQP_PORT, 10) || 3007,
 			username: process.env.AMQP_USERNAME,
 			password: process.env.AMQP_PASSWORD,
+		},
+		product: {
+			host: process.env.PRODUCT_HOST || 'localhost',
 		},
 	}
 	if (process.env.NODE_ENV === 'test') {
