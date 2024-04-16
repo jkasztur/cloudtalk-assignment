@@ -27,4 +27,8 @@ export class ReviewsRepository {
 		Object.assign(review, changes)
 		return await this.repository.save(review)
 	}
+
+	async list(productId: number) {
+		return this.repository.findBy({ productId })
+	}
 }

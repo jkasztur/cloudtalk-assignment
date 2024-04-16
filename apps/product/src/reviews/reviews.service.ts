@@ -55,6 +55,10 @@ export class ReviewsService {
 		return updated
 	}
 
+	async getForProduct(productId: number): Promise<Review[]> {
+		return this.repository.list(productId)
+	}
+
 	private sendEvent(event: 'review.created', data: ReviewCreated): void
 	private sendEvent(event: 'review.deleted', data: ReviewDeleted): void
 	private sendEvent(event: 'review.updated', data: ReviewUpdated): void

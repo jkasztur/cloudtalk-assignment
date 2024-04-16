@@ -16,11 +16,16 @@ import { CreateProductRequest, UpdateProductRequest } from './products.dto'
 import { ApiTags } from '@nestjs/swagger'
 import { Product } from './product.entity'
 import { DeleteResponse } from 'src/app.dto'
+import { ReviewsService } from 'src/reviews/reviews.service'
+import { Review } from 'src/reviews/review.entity'
 
 @Controller('/products')
 @ApiTags('products')
 export class ProductsController {
-	constructor(private service: ProductsService) {}
+	constructor(
+		private service: ProductsService,
+		private reviewService: ReviewsService
+	) { }
 
 	@Post('/')
 	@HttpCode(HttpStatus.OK)
@@ -57,5 +62,12 @@ export class ProductsController {
 			throw new NotFoundException('Product not found')
 		}
 		return product
+	}
+
+	@Get('/:id/reviews')
+	@HttpCode(HttpStatus.OK)
+	async getReviews(@Param('id') id: number): Promise<Review[]> {
+		// TODO: use pagination? currently returns all
+		return this.reviewService.getForProduct(id)
 	}
 }

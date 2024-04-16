@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { Module, forwardRef } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Review } from './review.entity'
 import { ReviewsController } from './reviews.controller'
@@ -26,9 +26,10 @@ import { RmqUrl } from '@nestjs/microservices/external/rmq-url.interface'
 				}),
 			},
 		]),
-		ProductsModule,
+		forwardRef(() => ProductsModule)
 	],
 	providers: [ReviewsRepository, ReviewsService],
 	controllers: [ReviewsController],
+	exports: [ReviewsService]
 })
 export class ReviewsModule {}
