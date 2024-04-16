@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common'
 import { ProductsService } from './products.service'
 import { CreateProductRequest, UpdateProductRequest } from './products.dto'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger'
 import { Product } from './product.entity'
 import { DeleteResponse } from 'src/app.dto'
 import { ReviewsService } from 'src/reviews/reviews.service'
@@ -22,6 +22,7 @@ import { Review } from 'src/reviews/review.entity'
 import { MessagePattern, Payload } from '@nestjs/microservices'
 import { AverageUpdated, EventType } from 'src/app.events'
 import { ProductRatingService } from './product-rating.service'
+import { AggregatedReviews } from 'src/reviews/reviews.types'
 
 @Controller('/products')
 @ApiTags('products')
@@ -75,6 +76,16 @@ export class ProductsController {
 	async getReviews(@Param('id') id: number): Promise<Review[]> {
 		// TODO: use pagination? currently returns all
 		return this.reviewService.getForProduct(id)
+	}
+
+	// internal endpoint, to fetch not cached product
+	// TODO: add security, move to new controller?
+	@Get('/:id/reviews-aggregated')
+	@ApiExcludeEndpoint()
+	async getReviewsAggregated(
+		@Param('id') id: number,
+	): Promise<AggregatedReviews> {
+		return this.reviewService.getAggregated(id)
 	}
 
 	@MessagePattern(EventType.AverageUpdated)

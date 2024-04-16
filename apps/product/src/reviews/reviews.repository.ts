@@ -2,6 +2,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { Injectable } from '@nestjs/common'
 import { Review } from './review.entity'
+import { AggregatedReviews } from './reviews.types'
 
 @Injectable()
 export class ReviewsRepository {
@@ -30,5 +31,24 @@ export class ReviewsRepository {
 
 	async list(productId: number) {
 		return this.repository.findBy({ productId })
+	}
+
+	async getAggregated(productId: number): Promise<AggregatedReviews> {
+		const results: AggregatedReviews[] = await this.repository
+			.createQueryBuilder()
+			.select(['product_id', 'count(*)', 'sum(rating)'])
+			.where({ productId })
+			.groupBy('product_id')
+			.execute()
+		if (results.length === 0) {
+			return {
+				count: 0,
+				sum: 0,
+			}
+		}
+		return {
+			count: Number(results[0].count),
+			sum: Number(results[0].sum),
+		}
 	}
 }

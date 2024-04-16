@@ -6,6 +6,7 @@ import { ReviewCreated, ReviewDeleted, ReviewUpdated } from '../app.events'
 import pick from 'object.pick'
 import { ProductsService } from 'src/products/products.service'
 import omit from 'object.omit'
+import { AggregatedReviews } from './reviews.types'
 
 @Injectable()
 export class ReviewsService {
@@ -57,6 +58,10 @@ export class ReviewsService {
 
 	async getForProduct(productId: number): Promise<Review[]> {
 		return this.repository.list(productId)
+	}
+
+	async getAggregated(productId: number): Promise<AggregatedReviews> {
+		return this.repository.getAggregated(productId)
 	}
 
 	private sendEvent(event: 'review.created', data: ReviewCreated): void
