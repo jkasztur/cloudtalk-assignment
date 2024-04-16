@@ -28,6 +28,7 @@ export class ProductsRepository {
 	/**
 	 * Basic pagination. For next page, client should should send offset from its last request.
 	 * Returned offset:null means there are no more items.
+	 * TODO: add pagination also to other endpoints
 	 */
 	async getAll(
 		idOffset: number = null,
@@ -47,5 +48,18 @@ export class ProductsRepository {
 
 	async get(id: number): Promise<Product> {
 		return this.repository.findOneBy({ id })
+	}
+
+	async bulkUpdateRating(toUpdate: Record<string, string>) {
+		await this.repository.manager.transaction(async (manager) => {
+			for (const [productId, averageRating] of Object.entries(toUpdate)) {
+				await manager
+					.createQueryBuilder()
+					.update(Product)
+					.set({ averageRating: parseFloat(averageRating) })
+					.where({ id: Number(productId) })
+					.execute()
+			}
+		})
 	}
 }

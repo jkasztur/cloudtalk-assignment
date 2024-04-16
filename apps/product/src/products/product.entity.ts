@@ -1,3 +1,4 @@
+import { ApiHideProperty } from '@nestjs/swagger'
 import { Review } from 'src/reviews/review.entity'
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 
@@ -12,11 +13,13 @@ export class Product {
 	@Column({ length: 256 })
 	description: string
 
-	@Column()
+	@Column({ type: 'float8' })
 	price: number
 
-	@OneToMany(() => Review, (review) => review.product)
-	reviews: Review[]
+	@Column({ nullable: true, type: 'float8' })
+	averageRating: number
 
-	averageRating?: number | null
+	@OneToMany(() => Review, (review) => review.product)
+	@ApiHideProperty()
+	reviews: Review[]
 }

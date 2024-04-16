@@ -10,7 +10,8 @@ import { ProductsModule } from './products/products.module'
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 import { AppController } from './app.controller'
 import { ReviewsModule } from './reviews/reviews.module'
-import { RatingsModule } from './ratings/ratings.module'
+import { RedisModule } from '@songkeys/nestjs-redis'
+import { ScheduleModule } from '@nestjs/schedule'
 
 @Module({
 	imports: [
@@ -29,9 +30,23 @@ import { RatingsModule } from './ratings/ratings.module'
 				autoLoadEntities: true,
 			}),
 		}),
+		RedisModule.forRootAsync({
+			imports: [ConfigModule],
+			inject: [ConfigService],
+			useFactory: (configService: ConfigService) => ({
+				commonOptions: {
+					lazyConnect: false,
+				},
+				config: {
+					...configService.get('redis'),
+					maxRetriesPerRequest: 1,
+					showFriendlyErrorStack: true,
+				},
+			}),
+		}),
+		ScheduleModule.forRoot(),
 		ProductsModule,
 		ReviewsModule,
-		RatingsModule,
 	],
 	controllers: [AppController],
 	providers: [

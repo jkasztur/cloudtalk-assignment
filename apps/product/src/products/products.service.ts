@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { ProductsRepository } from './products.repository'
 import { Product } from './product.entity'
+import { ProductRatingService } from './product-rating.service'
 
 @Injectable()
 export class ProductsService {
-	constructor(private repository: ProductsRepository) {}
+	constructor(
+		private repository: ProductsRepository,
+		private ratingService: ProductRatingService,
+	) {}
 
 	async create(product: Partial<Product>): Promise<Product> {
 		return this.repository.create(product)
@@ -26,13 +30,12 @@ export class ProductsService {
 	async getById(id: number) {
 		const product = await this.repository.get(id)
 		if (product) {
-			product.averageRating = await this.getAverageRating()
+			const cachedRating = await this.ratingService.getCachedRating(id)
+			if (cachedRating) {
+				// cached average rating is always latest
+				product.averageRating = cachedRating
+			}
 		}
 		return product
-	}
-
-	private getAverageRating() {
-		// TODO: get average rating from cache
-		return Promise.resolve(null)
 	}
 }

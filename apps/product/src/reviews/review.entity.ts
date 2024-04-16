@@ -1,3 +1,4 @@
+import { ApiHideProperty } from '@nestjs/swagger'
 import { Product } from 'src/products/product.entity'
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 
@@ -22,5 +23,6 @@ export class Review {
 	productId: number
 
 	@ManyToOne(() => Product, (product) => product.reviews)
+	@ApiHideProperty()
 	product: Product
 }

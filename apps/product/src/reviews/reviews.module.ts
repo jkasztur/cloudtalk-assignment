@@ -26,10 +26,10 @@ import { RmqUrl } from '@nestjs/microservices/external/rmq-url.interface'
 				}),
 			},
 		]),
-		forwardRef(() => ProductsModule)
+		forwardRef(() => ProductsModule),
 	],
 	providers: [ReviewsRepository, ReviewsService],
 	controllers: [ReviewsController],
-	exports: [ReviewsService]
+	exports: [ReviewsService],
 })
 export class ReviewsModule {}
