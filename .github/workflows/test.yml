@@ -1,0 +1,31 @@
+name: Test workflow
+
+on: push
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20.9.0'
+
+      - name: Install dependencies
+        run: npm i
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run tests
+        run: |
+          docker-compose up -d postgres redis rabbitmq
+          npm run test
+          docker-compose down
+
+      - name: Docker build - product
+        run: docker-compose build product
+
+      - name: Docker build - review-processing
+        run: docker-compose build review-processing-1

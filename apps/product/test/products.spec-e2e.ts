@@ -43,6 +43,7 @@ describe('/products', () => {
 				.expect(200)
 			expect(response.body).toMatchObject({
 				id: expect.any(Number),
+				averageRating: null,
 				...fullProduct,
 			})
 			await expect(repository.get(response.body.id)).resolves.toBeTruthy()
@@ -90,6 +91,7 @@ describe('/products', () => {
 					name: 'Factorio',
 					description: product.description,
 					price: product.price,
+					averageRating: null
 				})
 		})
 

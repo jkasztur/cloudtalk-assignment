@@ -37,7 +37,9 @@ export class ProductRatingService {
 			return
 		}
 		if (Object.keys(toUpdate).length > 500) {
-			this.logger.warn(`Too many values to store: ${Object.keys(toUpdate).length}. Consider splitting to batches`)
+			this.logger.warn(
+				`Too many values to store: ${Object.keys(toUpdate).length}. Consider splitting to batches`,
+			)
 		}
 		this.logger.log(`Storing ${Object.keys(toUpdate).length} values`)
 		await this.repository.bulkUpdateRating(toUpdate)
