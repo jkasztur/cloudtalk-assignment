@@ -31,14 +31,14 @@ export class ProductsRepository {
 	 * TODO: add pagination also to other endpoints
 	 */
 	async getAll(
-		idOffset: number = null,
-		limit: number = 100,
+		idOffset: number,
+		limit: number,
 	): Promise<ListResponse<Product>> {
 		const items = await this.repository.find({
 			where: {
-				id: MoreThan(idOffset),
+				id: MoreThan(Number.isInteger(idOffset) ? idOffset : 0),
 			},
-			take: limit ?? 0,
+			take: Number.isInteger(limit) ? limit : 100,
 			order: { id: 'ASC' },
 		})
 

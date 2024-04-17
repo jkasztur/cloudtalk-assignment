@@ -11,10 +11,11 @@ import {
 	BadRequestException,
 	Get,
 	Logger,
+	Query,
 } from '@nestjs/common'
 import { ProductsService } from './products.service'
 import { CreateProductRequest, UpdateProductRequest } from './products.dto'
-import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger'
+import { ApiExcludeEndpoint, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { Product } from './product.entity'
 import { DeleteResponse } from 'src/app.dto'
 import { ReviewsService } from 'src/reviews/reviews.service'
@@ -71,10 +72,21 @@ export class ProductsController {
 		return product
 	}
 
+	@Get('/')
+	@HttpCode(HttpStatus.OK)
+	@ApiQuery({ name: 'offset', required: false, type: Number })
+	@ApiQuery({ name: 'limit', required: false, type: Number })
+	async getProducts(
+		@Query('offset') offset?: number,
+		@Query('limit') limit?: number,
+	) {
+		return this.service.getAll(offset, limit)
+	}
+
 	@Get('/:id/reviews')
 	@HttpCode(HttpStatus.OK)
 	async getReviews(@Param('id') id: number): Promise<Review[]> {
-		// TODO: use pagination? currently returns all
+		// TODO: use pagination like for products? currently returns all
 		return this.reviewService.getForProduct(id)
 	}
 

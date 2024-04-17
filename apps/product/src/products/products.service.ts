@@ -38,4 +38,8 @@ export class ProductsService {
 		}
 		return product
 	}
+
+	async getAll(offset: number, limit: number) {
+		return this.repository.getAll(offset, limit)
+	}
 }
