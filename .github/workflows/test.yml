@@ -20,7 +20,7 @@ jobs:
 
       - name: Run tests
         run: |
-          docker-compose up -d postgres redis rabbitmq
+          docker-compose up -d postgres redis amqp
           npm run test
           docker-compose down
 

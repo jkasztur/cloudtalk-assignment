@@ -123,4 +123,4 @@ services:
 
 networks:
   default:
-    name: cloudtalke
+    name: cloudtalk
