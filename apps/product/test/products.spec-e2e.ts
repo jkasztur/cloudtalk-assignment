@@ -91,7 +91,7 @@ describe('/products', () => {
 					name: 'Factorio',
 					description: product.description,
 					price: product.price,
-					averageRating: null
+					averageRating: null,
 				})
 		})
 
