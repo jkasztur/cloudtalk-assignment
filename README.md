@@ -6,7 +6,7 @@
 - Postgres DB + TypeORM
 - Redis for caching and locking
 - RabbitMQ as messaging broker
-- ~~Github Actions~~ (planned)
+- Github Actions CI
 
 # How to start
 ```
@@ -53,7 +53,6 @@ There is implemented redis lock by productId. So we always process only one even
 It should be possible to use Lua script directly in redis, instead of two separate redis call. If used, we would not need redis locks, as the update would happen atomically
 
 # What wasn't done
-- CI setup
 - Tests - only E2E tests for `/products` endpoints. Rest wasn't done because of time constraints
 - Security - endpoints are public. Should accept some access_token or api key. Not done, because of of scope
 - Shared package for shared types
